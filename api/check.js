@@ -38,6 +38,7 @@ module.exports = async (req, res) => {
 
     if (testing == 'none') {
         res.status(200).send({ 'error': 'Server under maintenace, will be back in a few minutes.'})
+        return
     }
     
     if (token == 'none') {
