@@ -34,8 +34,12 @@ async function getTokenResponse(token) {
 
 module.exports = async (req, res) => {
 
-    const { token = 'none' } = req.query
+    const { token = 'none', testing = 'none'} = req.query
 
+    if (testing == 'none') {
+        res.status(200).send({ 'error': 'Server under maintenace, will be back in a few minutes.'})
+    }
+    
     if (token == 'none') {
         res.status(400).send({ 'error': 'No token provided' })
         return
