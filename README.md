@@ -14,7 +14,7 @@ This app is coded for use in [Vercel](https://vercel.com/). To set up yourslef:
 ## How to set up Google Cloud
 1) Make a new project
 2) Go to APIs & Services -> Enabled APIs & Services -> Enable APIs & Services and enable the *Play Integrity API*
-3) On the Google Play Integrity API page go to Credentials -> Create Credentials -> Service Accoutnt. Set a name and leave everything to the default.
+3) On the Google Play Integrity API page go to Credentials -> Create Credentials -> Service Account. Set a name and leave everything to the default.
 4) Go to Keys -> Add Key -> Create new key. The json that downloads automactially is the json you need for the Environment Variable.
 
 ## License
