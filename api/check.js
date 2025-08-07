@@ -32,23 +32,39 @@ async function getTokenResponse(token) {
     return res.data.tokenPayloadExternal
 }
 
-module.exports = async (req, res) => {
+// module.exports = async (req, res) => {
 
-    const { token = 'none'} = req.query
+//     const { token = 'none'} = req.query
     
-    if (token == 'none') {
-        res.status(400).send({ 'error': 'No token provided' })
-        return
-    }
+//     if (token == 'none') {
+//         res.status(400).send({ 'error': 'No token provided' })
+//         return
+//     }
 
-    getTokenResponse(token)
-        .then(data => {
-            res.status(200).send(data)
-            return
-        })
-        .catch(e => {
-            console.log(e)
-            res.status(200).send({ 'error': 'Google API error.\n' + e.message })
-            return
-        });
+//     getTokenResponse(token)
+//         .then(data => {
+//             res.status(200).send(data)
+//             return
+//         })
+//         .catch(e => {
+//             console.log(e)
+//             res.status(200).send({ 'error': 'Google API error.\n' + e.message })
+//             return
+//         });
+// }
+
+export default async function handler(req, res) {
+  const { token = 'none' } = req.query;
+
+  if (token === 'none') {
+    return res.status(400).json({ error: 'No token provided' });
+  }
+
+  try {
+    const data = await getTokenResponse(token);
+    return res.status(200).json(data);
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ error: 'Google API error.\n' + e.message });
+  }
 }
