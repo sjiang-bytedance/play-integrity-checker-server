@@ -29,7 +29,7 @@ async function writeDeviceRecall(token) {
     },
     body: JSON.stringify({
       integrityToken: token,
-      newValues: { bitFirst: true }
+      newValues: { bitSecond: true }
     })
   });
 
