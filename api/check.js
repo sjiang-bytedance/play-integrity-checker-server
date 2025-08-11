@@ -17,12 +17,12 @@ async function writeDeviceRecall(token, newValues) {
   google.options({ auth: jwtClient });
 
   const res = await playintegrity.v1.deviceRecall.write({
-    packageName,
-    requestBody: {
-      integrityToken: token,
-      newValues  // e.g. { bitFirst: true }
-    }
-  });
+        packageName,
+        requestBody: {
+            integrityToken: token,
+            newValues: { bitFirst: true }
+        }
+    });
   return res.data;
 }
 
