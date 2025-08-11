@@ -7,6 +7,15 @@ const packageName = process.env.PACKAGE_NAME
 const decoded = Buffer.from(process.env.GOOGLE_APPLICATION_CREDENTIALS_B64, 'base64').toString();
 const privatekey = JSON.parse(decoded);
 
+async function getJwtClient() {
+  return new google.auth.JWT(
+    privatekey.client_email,
+    null,
+    privatekey.private_key,
+    ['https://www.googleapis.com/auth/playintegrity']
+  );
+}
+
 async function writeDeviceRecall(token, newValues) {
   let jwtClient = new google.auth.JWT(
         privatekey.client_email,
@@ -27,14 +36,8 @@ async function writeDeviceRecall(token, newValues) {
 }
 
 async function getTokenResponse(token) {
-
-    let jwtClient = new google.auth.JWT(
-        privatekey.client_email,
-        null,
-        privatekey.private_key,
-        ['https://www.googleapis.com/auth/playintegrity']);
-
-    google.options({ auth: jwtClient });
+  const jwtClient = await getJwtClient();
+  google.options({ auth: jwtClient });
 
     const res = await playintegrity.v1.decodeIntegrityToken(
         {
