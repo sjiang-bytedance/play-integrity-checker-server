@@ -7,6 +7,25 @@ const packageName = process.env.PACKAGE_NAME
 const decoded = Buffer.from(process.env.GOOGLE_APPLICATION_CREDENTIALS_B64, 'base64').toString();
 const privatekey = JSON.parse(decoded);
 
+async function writeDeviceRecall(token, newValues) {
+  let jwtClient = new google.auth.JWT(
+        privatekey.client_email,
+        null,
+        privatekey.private_key,
+        ['https://www.googleapis.com/auth/playintegrity']);
+
+  google.options({ auth: jwtClient });
+
+  const res = await playintegrity.v1.deviceRecall.write({
+    packageName,
+    requestBody: {
+      integrityToken: token,
+      newValues  // e.g. { bitFirst: true }
+    }
+  });
+  return res.data;
+}
+
 async function getTokenResponse(token) {
 
     let jwtClient = new google.auth.JWT(
@@ -72,3 +91,25 @@ module.exports = async (req, res) => {
 //     return res.status(500).json({ error: 'Google API error.\n' + e.message });
 //   }
 // }
+
+
+export default async (req, res) => {
+    const { token = 'none' } = req.query;
+
+    if (token === 'none') {
+        res.status(400).send({ error: 'No token provided' });
+        return;
+    }
+
+    try {
+        // Always modify device recall first
+        await writeDeviceRecall(token);
+
+        // Then decode the token (may not reflect change immediately)
+        const decoded = await getTokenResponse(token);
+        res.status(200).send(decoded);
+    } catch (e) {
+        console.error(e);
+        res.status(500).send({ error: 'Google API error: ' + e.message });
+    }
+};
