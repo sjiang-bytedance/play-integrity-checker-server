@@ -87,7 +87,7 @@ export default async (req, res) => {
 
     try {
         // Always modify device recall first
-        await writeDeviceRecall(token);
+        // await writeDeviceRecall(token);
 
         // Then decode the token (may not reflect change immediately)
         const decoded = await getTokenResponse(token);
