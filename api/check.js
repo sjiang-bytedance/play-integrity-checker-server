@@ -44,6 +44,7 @@ module.exports = async (req, res) => {
 
     getTokenResponse(token)
         .then(data => {
+            console.log(data)
             res.status(200).send(data)
             return
         })
