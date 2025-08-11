@@ -16,23 +16,28 @@ async function getJwtClient() {
   );
 }
 
-async function writeDeviceRecall(token, newValues) {
-  let jwtClient = new google.auth.JWT(
-        privatekey.client_email,
-        null,
-        privatekey.private_key,
-        ['https://www.googleapis.com/auth/playintegrity']);
+async function writeDeviceRecall(token) {
+  const jwtClient = await getJwtClient();
+  await jwtClient.authorize();
 
-  google.options({ auth: jwtClient });
+  const url = `https://playintegrity.googleapis.com/v1/${encodeURIComponent(packageName)}/deviceRecall:write`;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${jwtClient.credentials.access_token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      integrityToken: token,
+      newValues: { bitFirst: true }
+    })
+  });
 
-  const res = await playintegrity.v1.deviceRecall.write({
-        packageName,
-        requestBody: {
-            integrityToken: token,
-            newValues: { bitFirst: true }
-        }
-    });
-  return res.data;
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Error writing deviceRecall: ${response.status} ${errorText}`);
+  }
+  return response.json();
 }
 
 async function getTokenResponse(token) {
@@ -90,7 +95,7 @@ export default async (req, res) => {
 
     try {
         // Always modify device recall first
-        // await writeDeviceRecall(token);
+        await writeDeviceRecall(token);
 
         // Then decode the token (may not reflect change immediately)
         const decoded = await getTokenResponse(token);
