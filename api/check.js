@@ -28,7 +28,10 @@ async function getTokenResponse(token) {
     );
 
 
-    console.log(res.data.tokenPayloadExternal);
+    // console.log(res.data.tokenPayloadExternal);
+    console.log(
+      JSON.stringify(res.data.tokenPayloadExternal, null, 2)
+    );
 
     return res.data.tokenPayloadExternal
 }
