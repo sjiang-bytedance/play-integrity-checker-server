@@ -54,11 +54,7 @@ async function getTokenResponse(token) {
 
     );
 
-
-    // console.log(res.data.tokenPayloadExternal);
-    console.log(
-      JSON.stringify(res.data.tokenPayloadExternal, null, 2)
-    );
+    console.log(JSON.stringify(res.data.tokenPayloadExternal, null, 2));
 
     return res.data.tokenPayloadExternal
 }
@@ -94,10 +90,9 @@ export default async (req, res) => {
     }
 
     try {
-        // Always modify device recall first
-        await writeDeviceRecall(token);
+        // await writeDeviceRecall(token);
 
-        // Then decode the token (may not reflect change immediately)
+        // decode the token (may not reflect device recall change immediately)
         const decoded = await getTokenResponse(token);
         res.status(200).send(decoded);
     } catch (e) {
