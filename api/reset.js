@@ -48,7 +48,7 @@ async function getTokenResponse(token) {
   const jwtClient = await getJwtClient();
   google.options({ auth: jwtClient });
 
-  console.log(token);
+//   console.log(token);
 
     const res = await playintegrity.v1.decodeIntegrityToken(
         {
