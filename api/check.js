@@ -92,7 +92,7 @@ export default async (req, res) => {
     }
 
     try {
-        await writeDeviceRecall(token);
+        // await writeDeviceRecall(token);
 
         // decode the token (may not reflect device recall change immediately)
         const decoded = await getTokenResponse(token);
