@@ -30,9 +30,9 @@ async function resetDeviceRecall(token) {
     body: JSON.stringify({
         integrityToken: token,
         newValues: {
-            bitFirst: false,
-            bitSecond: false,
-            bitThird: false
+            bitFirst: true,
+            // bitSecond: false,
+            // bitThird: false
         }
     })
   });
